@@ -27,9 +27,9 @@ graph TD
 
     Script -.-> Env
     Script -- Authenticates & Exports --> Source
-    Script -- Transfers Data (SCP/KubeCP) --> Disk
+    Script -- Transfers credentials (SCP/KubeCP) --> Disk
     Script -- Authenticates & Imports --> Target
-    Target -- Reads --> Disk
+    Target -- Reads credentials --> Disk
 ```
 
 ### migration Lifecycle
@@ -38,7 +38,7 @@ graph TD
 sequenceDiagram
     participant S as Shell Script
     participant SRC as Source Controller
-    participant TGT_FS as Target Filesystem
+    participant TGT_FS as Target Filesystem (Jenkins Home)
     participant TGT as Target Controller
 
     Note over S: 1. Setup
