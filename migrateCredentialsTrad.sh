@@ -21,7 +21,7 @@ tail -n 1 "$GEN_DIR/tmp-folder.txt" | sed -e "s#\[\"##g" -e "s#\"\]##g" | tee "$
 
 # IMPORT FOLDER CREDENTIALS
 echo "------------------  IMPORT FOLDER CREDENTIALS  ------------------"
-scp "$GEN_DIR/folder-imports.txt" "${TARGET_SSH_USER}@${TARGET_SSH_HOST}:/var/jenkins_home/"
+scp "$GEN_DIR/folder-imports.txt" "${TARGET_USER}@${TARGET_HOST}:/var/jenkins_home/"
 curl -o "$GEN_DIR/update-credentials-folder-level.groovy" https://raw.githubusercontent.com/cloudbees/jenkins-scripts/master/credentials-migration/update-credentials-folder-level.groovy
 cat "$GEN_DIR/update-credentials-folder-level.groovy" | sed "s#^\/\/ encoded.*#encoded = [new File(\"/var\/jenkins_home\/folder-imports.txt\").text]#g" > "$GEN_DIR/mod-update-credentials-folder-level.groovy"
 
@@ -37,7 +37,7 @@ tail -n 1 "$GEN_DIR/tmp-system-credentials.txt" | sed -e "s#\[\"##g" -e "s#\"\]#
 
 # IMPORT SYSTEM CREDENTIALS
 echo "-------------------- IMPORT SYSTEM CREDENTIALS  ------------------"
-scp "$GEN_DIR/system-imports.txt" "${TARGET_SSH_USER}@${TARGET_SSH_HOST}:/var/jenkins_home/"
+scp "$GEN_DIR/system-imports.txt" "${TARGET_USER}@${TARGET_HOST}:/var/jenkins_home/"
 curl -o "$GEN_DIR/update-credentials-system-level.groovy" https://raw.githubusercontent.com/cloudbees/jenkins-scripts/master/credentials-migration/update-credentials-system-level.groovy
 cat "$GEN_DIR/update-credentials-system-level.groovy" | sed "s#^\/\/ encoded.*#encoded = [new File(\"/var\/jenkins_home\/system-imports.txt\").text]#g" > "$GEN_DIR/mod-update-credentials-system-level.groovy"
 
