@@ -22,6 +22,13 @@ tail -n 1 "$GEN_DIR/tmp-folder.txt" | sed -e "s#\[\"##g" -e "s#\"\]##g" | tee "$
 # IMPORT FOLDER CREDENTIALS
 echo "------------------  IMPORT FOLDER CREDENTIALS  ------------------"
 scp "$GEN_DIR/folder-imports.txt" "${TARGET_USER}@${TARGET_HOST}:/var/jenkins_home/"
+# Use below scp/ssh approach if you: 
+# - need to change the owner of the file and 
+# - sudo is required:
+# - or piavtekey auth is used instead of token:
+# scp -i $PRIVATE_KEY_FILE "$GEN_DIR/folder-imports.txt" "${TARGET_USER}@${TARGET_HOST}:/tmp"
+# ssh -v -i $PRIVATE_KEY_FILE ${TARGET_USER}@${TARGET_HOST} "sudo -i chown cloudbees-core-cm:cloudbees-core-cm /tmp/folder-imports.txt && sudo -i mv /tmp/folder-imports.txt /var/jenkins_home/"
+
 curl -o "$GEN_DIR/update-credentials-folder-level.groovy" https://raw.githubusercontent.com/cloudbees/jenkins-scripts/master/credentials-migration/update-credentials-folder-level.groovy
 cat "$GEN_DIR/update-credentials-folder-level.groovy" | sed "s#^\/\/ encoded.*#encoded = [new File(\"/var\/jenkins_home\/folder-imports.txt\").text]#g" > "$GEN_DIR/mod-update-credentials-folder-level.groovy"
 
@@ -38,6 +45,13 @@ tail -n 1 "$GEN_DIR/tmp-system-credentials.txt" | sed -e "s#\[\"##g" -e "s#\"\]#
 # IMPORT SYSTEM CREDENTIALS
 echo "-------------------- IMPORT SYSTEM CREDENTIALS  ------------------"
 scp "$GEN_DIR/system-imports.txt" "${TARGET_USER}@${TARGET_HOST}:/var/jenkins_home/"
+# Use below scp/ssh approach if you: 
+# - need to change the owner of the file and 
+# - sudo is required:
+# - or piavtekey auth is used instead of token:
+# scp -i $PRIVATE_KEY_FILE "$GEN_DIR/system-imports.txt" "${TARGET_USER}@${TARGET_HOST}:/tmp"
+# ssh -v -i $PRIVATE_KEY_FILE ${TARGET_USER}@${TARGET_HOST} "sudo -i chown cloudbees-core-cm:cloudbees-core-cm /tmp/system-imports.txt && sudo -i mv /tmp/system-imports.txt /var/jenkins_home/"
+
 curl -o "$GEN_DIR/update-credentials-system-level.groovy" https://raw.githubusercontent.com/cloudbees/jenkins-scripts/master/credentials-migration/update-credentials-system-level.groovy
 cat "$GEN_DIR/update-credentials-system-level.groovy" | sed "s#^\/\/ encoded.*#encoded = [new File(\"/var\/jenkins_home\/system-imports.txt\").text]#g" > "$GEN_DIR/mod-update-credentials-system-level.groovy"
 
